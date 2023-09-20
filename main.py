@@ -8,8 +8,9 @@ FRAMERATE = 60 # Set fps
 
 def main():
     pg.init()
-    window_size = (560, 800)
-    screen = pg.display.set_mode(window_size)
+    case_size = 40 #pixels
+    width, height = 14 * case_size, 20 * case_size
+    screen = pg.display.set_mode((width, height))
     game_over = False
     terrain = Terrain()
 
