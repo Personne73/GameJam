@@ -4,7 +4,7 @@ FRAMERATE = 60 # Set fps
 
 def main():
     pg.init()
-    window_size = (50, 800)
+    window_size = (560, 800)
     screen = pg.display.set_mode(window_size)
     game_over = False
     
