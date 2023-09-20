@@ -4,13 +4,15 @@ import sys
 from land.terrain import Terrain
 
 FRAMERATE = 60 # Set fps
+CASE_SIZE = 40 #pixels
+WIDTH = 14
+HEIGHT = 20
+WINDOW_SIZE = (CASE_SIZE * WIDTH, CASE_SIZE * HEIGHT)
 
 
 def main():
     pg.init()
-    case_size = 40 #pixels
-    width, height = 14 * case_size, 20 * case_size
-    screen = pg.display.set_mode((width, height))
+    screen = pg.display.set_mode(WINDOW_SIZE)
     game_over = False
     terrain = Terrain()
 
