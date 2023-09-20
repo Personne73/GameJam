@@ -1,6 +1,6 @@
 import pygame as pg
 
-class Personnage(object):
+class Player:
     MOVE_STEPS = 8
     buffer_x, buffer_y = 0, 0
     pos_x, pos_y = 240, 520

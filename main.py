@@ -2,7 +2,7 @@ import pygame as pg
 import sys
 
 from land.terrain import Terrain
-from player import Personnage
+from player import Player
 
 FRAMERATE = 60 # Set fps
 CASE_SIZE = 40 #pixels
@@ -18,7 +18,8 @@ def main():
     terrain = Terrain()
     
     clock_framerate = pg.time.Clock()
-    player = Personnage()
+    player = Player()
+    
     while not game_over:
         terrain.update(screen)
         for event in pg.event.get():
@@ -37,8 +38,7 @@ def main():
                     player.move(1, 0)
                 elif event.key == pg.K_q:
                     player.move(-1, 0)
-
-        # screen.fill("#579928")
+        
         screen.fill("#b1d670")
         player.draw(screen)
         pg.display.flip()
