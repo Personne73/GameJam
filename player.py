@@ -1,67 +1,49 @@
 import pygame as pg
+import main
 
-class Player:
-    MOVE_STEPS = 8
-    buffer_x, buffer_y = 0, 0
-    pos_x, pos_y = 240, 520
-    jmp = 0
-    angle = 0
+class Player(pg.sprite.Sprite):
+    def __init__(self, image_path: str):
+        super().__init__()
+        self.image_avancer = pg.image.load(image_path + "player_z.png").convert_alpha()
+        self.image_reculer = pg.image.load(image_path + "player_s.png").convert_alpha()
+        self.image_gauche = pg.image.load(image_path + "player_q.png").convert_alpha()
+        self.image_droite = pg.image.load(image_path + "player_d.png").convert_alpha()
 
-    def __init__(self):
-        self.image = pg.image.load("chicken.png")
-        self.image = pg.transform.scale(self.image, (40, 40))
+        self.images = {
+            (0, -1): self.image_avancer,  # Vers le haut (direction y négative)
+            (0, 1): self.image_reculer,  # Vers le bas (direction y positive)
+            (-1, 0): self.image_gauche,  # Vers la gauche (direction x négative)
+            (1, 0): self.image_droite,  # Vers la droite (direction x positive)
+        }
 
-    def draw(self, screen):
-        img = self.image
-        offset = 0
-        # X animation
-        if (self.buffer_x < 0):
-            self.pos_x -= 40 / self.MOVE_STEPS
-            self.buffer_x += 1
-        elif (self.buffer_x > 0):
-            self.pos_x += 40 / self.MOVE_STEPS
-            self.buffer_x -= 1
-        # Y animation
-        if (self.buffer_y < 0):
-            self.pos_y -= 40 / self.MOVE_STEPS
-            self.buffer_y += 1
-        elif (self.buffer_y > 0):
-            self.pos_y += 40 / self.MOVE_STEPS
-            self.buffer_y -= 1
-        # Jump animation
-        if (self.jmp != 0):
-            factor = 1 + (self.MOVE_STEPS - abs(self.jmp - self.MOVE_STEPS)) / (self.MOVE_STEPS * 10)
-            img = pg.transform.scale(self.image, (40 * factor, 40 * factor))
-            offset = (40 * factor - 40) / 2
-            self.jmp += 1
-        if (self.jmp == 2 * self.MOVE_STEPS):
-            self.jmp = 0
-        screen.blit(img, (self.pos_x - offset, self.pos_y - offset))
+        self.image = self.image_avancer
+        self.mask = pg.mask.from_surface(self.image)
 
-    def get_pos(self):
-        '''
-        Retourne la position du joueur en nombre de cases
-        '''
-        return (int(self.pos_x/40), int(self.pos_y/40))
-    
-    def pos_to_angle(self, dx, dy):
-        if (dy == 0):
-            return -90 if dx > 0 else 90
-        else:
-            return 0 if dy > 0 else 180
 
-    def move(self, dx: int, dy: int, blocked: bool = False):
-        '''
-        dx : Nombre de cases sur l'axe x [-1, 1]
-        dy : Nombre de cases sur l'axe y [-1, 1]
-        blocked : Si True, le joueur ne sera pas déplacé
-        '''
-        if (not blocked):
-            self.buffer_x += dx * self.MOVE_STEPS
-            self.buffer_y -= dy * self.MOVE_STEPS
-        new_angle = self.pos_to_angle(dx, dy)
-        if (self.angle != new_angle):
-            self.image = pg.transform.rotate(self.image, - self.angle + new_angle)
-            self.angle = new_angle
-        if (self.jmp == 0):
-            self.jmp = 1
+        self.position = [7, 15]
+        self.rect = self.image.get_rect()
+        self.x = self.position[0] * main.CASE_SIZE  # Position initiale en pixels (6ème colonne)
+        self.y = self.position[1] * main.CASE_SIZE  # Position initiale en pixels (dernière ligne)
+
+
+    def update(self, car_group):
+        self.check_collision(car_group)
+        self.rect.topleft = (self.x, self.y)
+        
+    def move (self, direction):
+        # Vérifier si le déplacement est valide
+        new_x = self.x + direction[0] * main.CASE_SIZE
+        new_y = self.y + direction[1] * main.CASE_SIZE
+        if 0 <= new_x < main.WINDOW_SIZE[0] and 0 <= new_y < main.WINDOW_SIZE[1]:
+            self.x = new_x
+            self.y = new_y
+        self.image = self.images.get(direction, self.image)
+
+    def check_collision(self, car_group):
+        car_check = pg.sprite.spritecollide(self, car_group, False, pg.sprite.collide_mask)
+        if car_check:
+            main.GAME_OVER = True
+
+        
+    # def isBlocked(self, terrain):
+    #     if terrain[]
