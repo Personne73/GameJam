@@ -4,19 +4,19 @@ FRAMERATE = 60 # Set fps
 
 def main():
     pg.init()
-    windowSize = (1000, 800)
-    screen = pg.display.set_mode(windowSize)
-    GameOver = False
+    window_size = (50, 800)
+    screen = pg.display.set_mode(window_size)
+    game_over = False
     
-    clockFramerate = pg.time.Clock()
+    clock_framerate = pg.time.Clock()
 
-    while not GameOver:
+    while not game_over:
         for event in pg.event.get():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
-                    GameOver = True
+                    game_over = True
         
-        clockFramerate.tick(FRAMERATE)
+        clock_framerate.tick(FRAMERATE)
 
     pg.quit()
 
