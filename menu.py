@@ -55,7 +55,7 @@ def main():
         menu.draw()
 
         pg.display.flip()
-        clock_framerate.tick(FRAMERATE)
+        clock_framerate.tick(60)
 
     pg.quit()
 
