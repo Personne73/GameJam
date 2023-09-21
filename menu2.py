@@ -57,7 +57,7 @@ class Menu:
         rect.center = (x, y)
         self.screen.blit(image, rect)
 
-    def draw(self):
+    def draw(self, high_score):
         # Draw the background
         # self.screen.fill((0, 0, 0))  # Background color (black)
         background_image_path = os.path.join("images", "menu_background.png")
@@ -70,6 +70,24 @@ class Menu:
         # Draw the play button
         self.icon_play_button.draw_icon()
 
+        # Draw the high score
+        self.draw_high_score(high_score)
+
+    def draw_high_score(self, high_score):
+        SMALL_FONT = 15
+        MEDIUM_FONT = 15
+        BIG_FONT = 25
+
+        crossy_font_big = pg.font.Font('fonts/8-BIT WONDER.TTF', BIG_FONT)
+        crossy_font_small = pg.font.Font('fonts/8-BIT WONDER.TTF', SMALL_FONT)
+
+        font = pg.font.Font(crossy_font_big, 36)  # Sélectionnez la police et la taille de la police
+        text = font.render(f"High Score: {high_score}", True, (255, 255, 255))  # Créez un objet texte avec le score
+        text_rect = text.get_rect()
+        text_rect.center = (self.width // 2, 50)  # Centrez le texte en haut de la fenêtre
+        self.screen.blit(text, text_rect)  # Affichez le texte sur l'écran
+
+
     def handle_events(self):
         if self.icon_play_button.is_clicked():
             print("Start button clicked")
@@ -80,6 +98,8 @@ class Menu:
             self.icon_play_button.switch_icon()
             print("not hovered")
 
+    
+
 
 def main():
     pg.init()
@@ -89,9 +109,11 @@ def main():
 
     clock_framerate = pg.time.Clock()
 
+    high_score = 1000
+
     # Create the menu
     menu = Menu(screen)
-    menu.draw()
+    menu.draw(high_score)
 
     while not game_over:
         for event in pg.event.get():
@@ -101,6 +123,7 @@ def main():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     game_over = True
+
 
         FRAMERATE = 60
 
