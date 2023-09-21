@@ -3,14 +3,21 @@ import pygame as pg
 
 
 class IconButton:
-    def __init__(self, icon_path, x, y, screen):
+    def __init__(self, icon_path, hovered_icon_path, x, y, screen):
         self.icon = pg.image.load(icon_path)
+        self.hovered_icon = pg.image.load(hovered_icon_path)
         self.rect = self.icon.get_rect()
         self.rect.center = (x, y)
         self.screen = screen
 
-    def draw(self):
         self.screen.blit(self.icon, self.rect)
+
+
+    def draw_icon(self):
+        self.screen.blit(self.icon, self.rect)
+
+    def draw_hovered(self):
+        self.screen.blit(self.hovered_icon, self.rect)
 
     def is_clicked(self):
         # Recover the mouse position
@@ -21,6 +28,19 @@ class IconButton:
             return True
 
         return False
+    def is_hovered(self):
+        mouse_pos = pg.mouse.get_pos()
+
+        if self.rect.collidepoint(mouse_pos):
+            return True
+        
+        return False
+    
+    def switch_icon(self):
+        if self.is_hovered():
+            self.draw_hovered()
+        elif not self.is_hovered():
+            self.draw_icon()
 
 
 class Menu:
@@ -28,7 +48,8 @@ class Menu:
         self.screen = screen
         self.width, self.height = screen.get_size()
         icon_play_button_path = os.path.join("images", "menu_play_button.png")
-        self.icon_play_button = IconButton(icon_play_button_path, self.width // 2, 3 * self.height // 4, self.screen)
+        icon_play_button_hovered_path = os.path.join("img", "menu_play_button_hover.png")
+        self.icon_play_button = IconButton(icon_play_button_path, icon_play_button_hovered_path, self.width // 2, 3 * self.height // 4, self.screen)
 
     def load_image(self, image_path, x, y):
         image = pg.image.load(image_path)
@@ -47,11 +68,17 @@ class Menu:
         self.load_image(logo_image_path, self.width // 2, self.height // 2)
 
         # Draw the play button
-        self.icon_play_button.draw()
+        self.icon_play_button.draw_icon()
 
     def handle_events(self):
         if self.icon_play_button.is_clicked():
             print("Start button clicked")
+        if self.icon_play_button.is_hovered():
+            self.icon_play_button.switch_icon()
+            print("hovered")
+        if not self.icon_play_button.is_hovered():
+            self.icon_play_button.switch_icon()
+            print("not hovered")
 
 
 def main():
