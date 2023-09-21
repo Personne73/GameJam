@@ -8,6 +8,7 @@ class Player(pg.sprite.Sprite):
         self.image_reculer = pg.image.load(image_path + "player_s.png").convert_alpha()
         self.image_gauche = pg.image.load(image_path + "player_q.png").convert_alpha()
         self.image_droite = pg.image.load(image_path + "player_d.png").convert_alpha()
+        self.is_alive = True
 
         self.images = {
             (0, -1): self.image_avancer,  # Vers le haut (direction y négative)
@@ -30,7 +31,7 @@ class Player(pg.sprite.Sprite):
         self.check_collision(car_group)
         self.rect.topleft = (self.x, self.y)
         
-    def move (self, direction):
+    def move(self, direction):
         # Vérifier si le déplacement est valide
         new_x = self.x + direction[0] * main.CASE_SIZE
         new_y = self.y + direction[1] * main.CASE_SIZE
@@ -40,10 +41,8 @@ class Player(pg.sprite.Sprite):
         self.image = self.images.get(direction, self.image)
 
     def check_collision(self, car_group):
-        car_check = pg.sprite.spritecollide(self, car_group, False, pg.sprite.collide_mask)
-        if car_check:
-            main.GAME_OVER = True
-
+        if pg.sprite.spritecollide(self, car_group, False, pg.sprite.collide_mask):
+            self.is_alive = False
         
     # def isBlocked(self, terrain):
     #     if terrain[]
