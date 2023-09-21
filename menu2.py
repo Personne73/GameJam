@@ -12,7 +12,6 @@ class IconButton:
 
         self.screen.blit(self.icon, self.rect)
 
-
     def draw_icon(self):
         self.screen.blit(self.icon, self.rect)
 
@@ -28,6 +27,7 @@ class IconButton:
             return True
 
         return False
+
     def is_hovered(self):
         mouse_pos = pg.mouse.get_pos()
 
@@ -47,9 +47,17 @@ class Menu:
     def __init__(self, screen):
         self.screen = screen
         self.width, self.height = screen.get_size()
+
+        # Create the play button
         icon_play_button_path = os.path.join("images", "menu_play_button.png")
-        icon_play_button_hovered_path = os.path.join("img", "menu_play_button_hover.png")
+        icon_play_button_hovered_path = os.path.join("images", "menu_play_button_hover.png")
         self.icon_play_button = IconButton(icon_play_button_path, icon_play_button_hovered_path, self.width // 2, 3 * self.height // 4, self.screen)
+
+        # Create the sound button
+        icon_sound_button_path = os.path.join("images", "music_icon.png")
+        icon_sound_button_hovered_path = os.path.join("images", "music_icon_disabled.png")
+        self.icon_sound_button = IconButton(icon_sound_button_path, icon_sound_button_hovered_path, 80, 40, self.screen)
+        self.pause = False
 
     def load_image(self, image_path, x, y):
         image = pg.image.load(image_path)
@@ -91,17 +99,23 @@ class Menu:
         text_rect.center = (self.width // 2, 50)  # Centrez le texte en haut de la fenêtre
         self.screen.blit(text, text_rect)  # Affichez le texte sur l'écran
 
+        # Draw the sound button
+        self.icon_sound_button.draw_icon()
 
     def handle_events(self):
         if self.icon_play_button.is_clicked():
             pg.mixer.music.stop()
-            print("Start button clicked")
-        if self.icon_play_button.is_hovered():
+        if self.icon_sound_button.is_clicked():
+            if self.pause:
+                pg.mixer.music.unpause()
+                self.icon_sound_button.draw_icon()
+                self.pause = False
+            else:
+                pg.mixer.music.pause()
+                self.icon_sound_button.draw_hovered()
+                self.pause = True
+        if self.icon_play_button.is_hovered() or not self.icon_play_button.is_hovered():
             self.icon_play_button.switch_icon()
-            print("hovered")
-        if not self.icon_play_button.is_hovered():
-            self.icon_play_button.switch_icon()
-            print("not hovered")
 
     
 
