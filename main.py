@@ -12,6 +12,29 @@ WIDTH = 14
 HEIGHT = 20
 WINDOW_SIZE = (CASE_SIZE * WIDTH, CASE_SIZE * HEIGHT)
 
+def draw_score(score, best_score, screen):
+    if score >= best_score:
+        best_score = score
+
+    #font sizes
+    SMALL_FONT = 15
+    MEDIUM_FONT = 15
+    BIG_FONT = 25
+
+    #font decalarations
+    crossy_font_big = pg.font.Font('font/8-BIT WONDER.TTF', BIG_FONT)
+    crossy_font_small = pg.font.Font('font/8-BIT WONDER.TTF', SMALL_FONT)
+
+    my_score = crossy_font_big.render(str(score), True, 'white')
+    my_best_score = crossy_font_small.render('TOP ' + str(best_score), True, 'white')
+
+    #affichage des scores
+    CORNER = 40
+    screen.blit(my_score, (CORNER + 10, 10))
+
+    if not best_score == None:
+        screen.blit(my_best_score, (CORNER + 10, CORNER + 10))
+
 
 def main():
     pg.init()
@@ -20,6 +43,9 @@ def main():
     game_over = False
     clock_framerate = pg.time.Clock()
     terrain = Terrain()
+
+    score = 0
+    best_score = 0
 
     player = pl.Player(str(Path.cwd()) + "/Sprites/")
     player_group = pg.sprite.Group()
@@ -43,6 +69,7 @@ def main():
                     game_over = True
                 elif event.key == pg.K_z:
                     player.move(0, 1)
+                    score += 1
                     terrain.shift_terrain(screen)
                 elif event.key == pg.K_s:
                     player.move(0, -1)
@@ -58,8 +85,10 @@ def main():
         road1.update(car_group)
         road2.update(car_group)
         road3.update(car_group)
+        draw_score(score, best_score, screen)
         pg.display.update()
         clock_framerate.tick(FRAMERATE)
+
     pg.quit()
 
 

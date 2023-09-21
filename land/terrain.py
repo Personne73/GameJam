@@ -74,6 +74,7 @@ class Terrain(object):
         for y in range(18, -1, -1):
             for x in range(1, 13):
                 self.tableau[y + 1][x] = self.tableau[y][x]
+        
         self.tableau[0] = self.create_random_line()
         self.add_random_obstacles(0)
     
