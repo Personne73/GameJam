@@ -97,7 +97,6 @@ class Terrain(object):
                 self.tableau[y + 1][x] = self.tableau[y][x]
         
         if (self.count_bloc_glitch != 6 or self.count_lines % 50 == 0) and self.count_lines != 0:
-            print("in bloc", self.count_bloc_glitch)
             self.tableau[0] = self.bloc_glitch[self.count_bloc_glitch]
             self.count_bloc_glitch -= 1
             if self.count_bloc_glitch == 0: self.count_bloc_glitch = 6

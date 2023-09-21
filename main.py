@@ -31,6 +31,12 @@ def draw_score(score, best_score, screen):
     if not best_score == None:
         screen.blit(my_best_score, (CORNER + 10, CORNER + 10))
 
+def encounter_obstacle(player_position, tableau_terrain, direction):
+    if tableau_terrain[player_position[1] + direction[1]][player_position[0] + direction[0]].obstacle != 0:
+        return True 
+    return False
+
+
 
 def main():
     pg.init()
@@ -59,16 +65,20 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     game_over = True
                 elif event.key == pg.K_z:
-                    player.move(0, 1)
-                    score += 1
-                    terrain.shift_terrain()
+                    if not encounter_obstacle(player.get_position(), terrain.tableau, (0, 1)):
+                        player.move(0, 1)
+                        score += 1
+                        terrain.shift_terrain()
                 elif event.key == pg.K_s:
-                    player.move(0, -1)
+                    if not encounter_obstacle(player.get_position(), terrain.tableau, (0, -1)):
+                        player.move(0, -1)
                 elif event.key == pg.K_d:
-                    player.move(1, 0)
+                    if not encounter_obstacle(player.get_position(), terrain.tableau, (1, 0)):
+                        player.move(1, 0)
                 elif event.key == pg.K_q:
-                    player.move(-1, 0)
-        
+                    if not encounter_obstacle(player.get_position(), terrain.tableau, (-1, 0)):
+                        player.move(-1, 0)
+    
         player_group.update(car_group)
         car_group.update(0.05)
         car_group.draw(screen)
