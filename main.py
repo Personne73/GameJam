@@ -5,6 +5,9 @@ from land.terrain import Terrain
 import player as pl
 import constants
 
+MASK_L = pg.Rect(0, 0, constants.CASE_SIZE, constants.CASE_SIZE * constants.HEIGHT)
+MASK_R = pg.Rect(constants.CASE_SIZE * (constants.WIDTH - 1), 0, constants.CASE_SIZE, constants.CASE_SIZE * constants.HEIGHT)
+
 def draw_score(score, best_score, screen):
     if score >= best_score:
         best_score = score
@@ -66,14 +69,19 @@ def main():
                 elif event.key == pg.K_q:
                     player.move(-1, 0)
         
-        player_group.draw(screen)
         player_group.update(car_group)
-        car_group.draw(screen)
         car_group.update(0.05)
+        car_group.draw(screen)
+        draw_mask(screen)
+        player_group.draw(screen)
         draw_score(score, best_score, screen)
         pg.display.update()
         clock_framerate.tick(constants.FRAMERATE)
     pg.quit()
+
+def draw_mask(screen):
+    pg.draw.rect(screen, "black", MASK_L)
+    pg.draw.rect(screen, "black", MASK_R)
 
 
 if __name__ == "__main__":

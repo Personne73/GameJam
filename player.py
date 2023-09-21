@@ -29,14 +29,14 @@ class Player(pg.sprite.Sprite):
     def __init__(self, image_path: str):
         super().__init__()
         self.image = pg.image.load(image_path + "chicken.png")
-        self.image = pg.transform.scale(self.image, (40, 40))
+        self.image = pg.transform.scale(self.image, (36, 36))
         self.src_image = self.image
         self.is_alive = True
 
         self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.x = constants.CASE_SIZE * 6
-        self.y = constants.CASE_SIZE * (constants.HEIGHT - 3)
+        self.x = constants.CASE_SIZE * 6 + 2
+        self.y = constants.CASE_SIZE * (constants.HEIGHT - 3) + 2
         self.rect.topleft = (self.x, self.y)
 
     def update(self, car_group):
@@ -46,8 +46,8 @@ class Player(pg.sprite.Sprite):
         self.y += self.buffer_y.consume()
         if (self.jmp != 0):
             factor = 1 + (self.MOVE_STEPS - abs(self.jmp - self.MOVE_STEPS)) / (self.MOVE_STEPS * 10)
-            self.image = pg.transform.scale(self.src_image, (40 * factor, 40 * factor))
-            offset = (40 * factor - 40) / 2
+            self.image = pg.transform.scale(self.src_image, (36 * factor, 36 * factor))
+            offset = (36 * factor - 36) / 2
             self.jmp += 1
         if (self.jmp == 2 * self.MOVE_STEPS):
             self.jmp = 0
