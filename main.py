@@ -3,7 +3,7 @@ import sys
 
 from land.terrain import Terrain
 import player as pl
-from car import Car
+from land.road import Road
 from pathlib import Path
 
 FRAMERATE = 60 # Set fps
@@ -26,10 +26,11 @@ def main():
     player_group.add(player)
 
     car_group = pg.sprite.Group()
-    car_group.add(Car(str(Path.cwd()) + "/Sprites/", False))
-    # car_group.add(Car(str(Path.cwd()) + "/Sprites/", False))
-
-
+    road1 = Road(str(Path.cwd()) + "/Sprites/")
+    road2 = Road(str(Path.cwd()) + "/Sprites/")
+    road3 = Road(str(Path.cwd()) + "/Sprites/")
+    road2.move(CASE_SIZE)
+    road3.move(CASE_SIZE * 3)
 
     while not game_over and player.is_alive:
         for event in pg.event.get():
@@ -54,6 +55,9 @@ def main():
         player_group.update(car_group)
         car_group.draw(screen)
         car_group.update(0.05)
+        road1.update(car_group)
+        road2.update(car_group)
+        road3.update(car_group)
         pg.display.update()
         clock_framerate.tick(FRAMERATE)
     pg.quit()
