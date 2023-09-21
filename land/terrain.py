@@ -37,6 +37,16 @@ class Terrain(object):
 
         self.count_lines = 0
 
+        self.bloc_glitch = [[Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GLITCH)],
+                            [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GLITCH)],
+                            [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GLITCH)],
+                            [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GLITCH)],
+                            [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GLITCH)],
+                            [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GLITCH)],
+                            [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GLITCH)]
+                            ]
+        self.count_bloc_glitch = 6
+        
     def add_random_obstacles(self, line):
         if self.tableau[line][1].type_terrain == TypeTerrain.GRASS:
 
@@ -86,9 +96,11 @@ class Terrain(object):
             for x in range(1, 13):
                 self.tableau[y + 1][x] = self.tableau[y][x]
         
-        i = self.count_lines % 50
-        if i in range(5):
-            print("salut", i) 
+        if (self.count_bloc_glitch != 6 or self.count_lines % 50 == 0) and self.count_lines != 0:
+            print("in bloc", self.count_bloc_glitch)
+            self.tableau[0] = self.bloc_glitch[self.count_bloc_glitch]
+            self.count_bloc_glitch -= 1
+            if self.count_bloc_glitch == 0: self.count_bloc_glitch = 6
         else:
             self.tableau[0] = self.create_random_line()
             self.add_random_obstacles(0)
