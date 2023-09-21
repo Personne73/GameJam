@@ -7,6 +7,7 @@ import constants
 class Road():
     next_car = 0
     last_car = None
+    obstacle = 0
 
     def __init__(self, type_terrain):
         super().__init__()

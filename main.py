@@ -31,9 +31,11 @@ def draw_score(score, best_score, screen):
     if not best_score == None:
         screen.blit(my_best_score, (CORNER + 10, CORNER + 10))
 
-def encounter_obstacle(player_position, tableau_terrain, direction):
-    if tableau_terrain[player_position[1] + direction[1]][player_position[0] + direction[0]].obstacle != 0:
-        return True 
+def encounter_obstacle(player_pos, terrain, direction):
+    pos_x = player_pos[0] + direction[0]
+    pos_y = player_pos[1] + direction[1]
+    if pos_y >= len(terrain) or pos_x >= len(terrain[0]) or terrain[pos_y][pos_x].obstacle != 0:
+        return True
     return False
 
 
@@ -65,19 +67,18 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     game_over = True
                 elif event.key == pg.K_z:
-                    if not encounter_obstacle(player.get_position(), terrain.tableau, (0, 1)):
-                        player.move(0, 1)
+                    obstacle = encounter_obstacle(player.get_position(), terrain.tableau, (0, -1))
+                    if not obstacle:
                         score += 1
-                        terrain.shift_terrain()
+                        if (player.get_position()[1] <= player.SCROLL_STOP):
+                            terrain.shift_terrain()
+                    player.move(0, 1, obstacle)
                 elif event.key == pg.K_s:
-                    if not encounter_obstacle(player.get_position(), terrain.tableau, (0, -1)):
-                        player.move(0, -1)
+                    player.move(0, -1, encounter_obstacle(player.get_position(), terrain.tableau, (0, 1)))
                 elif event.key == pg.K_d:
-                    if not encounter_obstacle(player.get_position(), terrain.tableau, (1, 0)):
-                        player.move(1, 0)
+                    player.move(1, 0, encounter_obstacle(player.get_position(), terrain.tableau, (1, 0)))
                 elif event.key == pg.K_q:
-                    if not encounter_obstacle(player.get_position(), terrain.tableau, (-1, 0)):
-                        player.move(-1, 0)
+                    player.move(-1, 0, encounter_obstacle(player.get_position(), terrain.tableau, (-1, 0)))
     
         player_group.update(car_group)
         car_group.update(0.05)
