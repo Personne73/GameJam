@@ -32,7 +32,6 @@ class Terrain(object):
             4: self.image_tree, 
         }
 
-
     def add_random_obstacles(self, line):
         if self.tableau[line][1].type_terrain == TypeTerrain.GRASS:
             for x in range(1, 13):
@@ -56,12 +55,6 @@ class Terrain(object):
                 self.tableau[y + 1][x] = self.tableau[y][x]
         self.tableau[0] = self.create_random_line()
         self.add_random_obstacles(0)
-        
-
-        # for i in range(20):
-        #     print("___________________________________________________________________")
-        #     for j in range(1, 13):
-        #         print("Type :", self.tableau[i][j].type_terrain, "Obstacle :", self.tableau[i][j].obstacle)
     
     def draw_grass(self, screen, y):
         pg.draw.rect(screen, (117, 214, 112), (40, y * 40, 12 * 40, 40))
@@ -74,10 +67,6 @@ class Terrain(object):
                 if obstacle_image:
                     # Dessinez l'image d'obstacle sur l'écran
                     screen.blit(obstacle_image, (x * 40, y * 40))
-        
-        # for x in range(1, 13):
-        #     if self.tableau[y][x].obstacle:
-        #         self.tableau[y][x].obstacle.update(screen, (self.tableau[y][x].obstacle.x, self.tableau[y][x].obstacle.y))
 
     def draw_road(self, screen, y):
         pg.draw.rect(screen, (100, 100, 100), (40, y * 40, 12 * 40, 40))
