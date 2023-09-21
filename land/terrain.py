@@ -18,6 +18,7 @@ class Terrain(object):
 
     def __init__(self):
         self.tableau = [[]for j in range(20)]
+
         self.init_terrain()
 
         self.image_bush = pg.image.load(os.path.abspath("./images/bush.png")).convert_alpha()
@@ -34,9 +35,25 @@ class Terrain(object):
 
     def add_random_obstacles(self, line):
         if self.tableau[line][1].type_terrain == TypeTerrain.GRASS:
+
+            max_obstacle = 8
+            count = 0
+        
             for x in range(1, 13):
-                if random.randint(1,10) in range(8): #permet de tirer 70% du temps un obstacle
+                # TO DO : checker qu'il reste bien une case vide au mini
+                if random.randint(1,10) in range(6) and count <= max_obstacle: #permet de tirer 70% du temps un obstacle
                     self.tableau[line][x].obstacle = random.randint(1, 4)
+                    count += 1
+            
+            if(line == 19):
+                return
+
+            # check if first grass line
+            if(self.tableau[line+1][1].type_terrain == TypeTerrain.GRASS):
+                for x in range(1, 13):
+                    if(self.tableau[line +1][x].obstacle == 0):
+                        self.tableau[line][x].obstacle = 0
+
 
         
     def create_random_line(self):
@@ -44,9 +61,13 @@ class Terrain(object):
         return [Cell(TypeTerrain.GLITCH) if i in [0, 13] else Cell(terrain_aleatoire) for i in range(14)]
     
     def init_terrain(self):
-        for y in range(20):
+        for y in range(19, -1, -1):
             self.tableau[y] = self.create_random_line()
             self.add_random_obstacles(y)
+
+        for i in range(3):
+            for x in range(1, 13):
+                self.tableau[19 - i][x] = Cell(TypeTerrain.GRASS, 0)
     
 
     def shift_terrain(self,screen):
