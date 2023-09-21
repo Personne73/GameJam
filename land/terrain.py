@@ -119,6 +119,10 @@ class Terrain(object):
 
     def draw_road(self, screen, y):
         pg.draw.rect(screen, (100, 100, 100), (40, y * 40, 12 * 40, 40))
+    
+    def draw_road_marks(self, screen, y):
+        road_marks = pg.image.load(os.path.abspath("./images/road_marks.png")).convert_alpha()
+        screen.blit(road_marks, (40, y * 40))
 
     def update(self, screen, car_group):
         # draw the obstacles
@@ -127,6 +131,11 @@ class Terrain(object):
                 self.draw_grass(screen, y)    
             elif self.tableau[y][1].type_terrain == TypeTerrain.ROAD:
                 self.draw_road(screen, y)
+
+                #check if lane road lane is size >= 2 to draw road marks:
+                if y > 0 and self.tableau[y-1][1].type_terrain == TypeTerrain.ROAD:
+                    self.draw_road_marks(screen, y)
+
                 road = self.tableau[y][1]
                 road.update(car_group)
                 if (road.y != y * constants.CASE_SIZE):
