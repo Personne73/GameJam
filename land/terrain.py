@@ -26,10 +26,10 @@ class Terrain(object):
         self.image_tree = pg.image.load(os.path.abspath("./images/tree.png")).convert_alpha()
 
         self.images_obstacles = {
-            1: self.image_bush,  # Vers le haut (direction y négative)
-            2: self.image_rock,  # Vers le bas (direction y positive)
-            3: self.image_trunk,  # Vers la gauche (direction x négative)
-            4: self.image_tree,  # Vers la droite (direction x positive)
+            1: self.image_bush,  
+            2: self.image_rock,  
+            3: self.image_trunk,  
+            4: self.image_tree, 
         }
 
 
@@ -54,6 +54,9 @@ class Terrain(object):
         for y in range(18, -1, -1):
             for x in range(1, 13):
                 self.tableau[y + 1][x] = self.tableau[y][x]
+        self.tableau[0] = self.create_random_line()
+        self.add_random_obstacles(0)
+        
 
         # for i in range(20):
         #     print("___________________________________________________________________")
