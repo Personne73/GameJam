@@ -8,7 +8,8 @@ from land.road import Road
 class TypeTerrain(Enum):
     GRASS = 1
     ROAD = 2
-    GLITCH = 3
+    BLACK = 3
+    GLITCH = 4
 
 class Cell():
     def __init__(self, type_terrain, obstacle=0):
@@ -37,13 +38,13 @@ class Terrain(object):
 
         self.count_lines = 0
 
-        self.bloc_glitch = [[Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GLITCH)],
+        self.bloc_glitch = [[Cell(TypeTerrain.BLACK), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.BLACK)],
                             [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GLITCH)],
                             [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GLITCH)],
                             [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GLITCH)],
                             [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GLITCH)],
                             [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GLITCH)],
-                            [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GLITCH)]
+                            [Cell(TypeTerrain.BLACK), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.BLACK)]
                             ]
         self.count_bloc_glitch = 6
         
@@ -71,7 +72,7 @@ class Terrain(object):
         
     def create_random_line(self):
         terrain_aleatoire = random.choice([TypeTerrain.GRASS, TypeTerrain.GRASS, TypeTerrain.GRASS, TypeTerrain.ROAD, TypeTerrain.ROAD])
-        new_line = [Cell(TypeTerrain.GLITCH) if i in [0, 13] else Cell(terrain_aleatoire) for i in range(14)]
+        new_line = [Cell(TypeTerrain.BLACK) if i in [0, 13] else Cell(terrain_aleatoire) for i in range(14)]
         if terrain_aleatoire is TypeTerrain.ROAD:
             new_line[1] = Road(TypeTerrain.ROAD)
         return new_line
@@ -93,17 +94,20 @@ class Terrain(object):
         if to_delete_line[1].type_terrain is TypeTerrain.ROAD:
             to_delete_line[1].kill()
         for y in range(18, -1, -1):
-            for x in range(1, 13):
+            for x in range(14):
                 self.tableau[y + 1][x] = self.tableau[y][x]
         
         if (self.count_bloc_glitch != 6 or self.count_lines % 50 == 0) and self.count_lines != 0:
             self.tableau[0] = self.bloc_glitch[self.count_bloc_glitch]
             self.count_bloc_glitch -= 1
-            if self.count_bloc_glitch == 0: self.count_bloc_glitch = 6
+            if self.count_bloc_glitch == -1: self.count_bloc_glitch = 6
         else:
             self.tableau[0] = self.create_random_line()
             self.add_random_obstacles(0)
         self.count_lines += 1
+        print("__________________________________________")
+        for y in range(20):
+            print("ligne:", y, " => gauche :", self.tableau[y][0].type_terrain, "droite:",self.tableau[y][13].type_terrain)
     
     def draw_grass(self, screen, y):
         pg.draw.rect(screen, (117, 214, 112), (40, y * 40, 12 * 40, 40))

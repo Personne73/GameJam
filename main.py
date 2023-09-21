@@ -2,6 +2,7 @@ import pygame as pg
 import sys
 
 from land.terrain import Terrain
+from land.terrain import TypeTerrain
 import player as pl
 import constants
 
@@ -34,7 +35,9 @@ def draw_score(score, best_score, screen):
 def encounter_obstacle(player_pos, terrain, direction):
     pos_x = player_pos[0] + direction[0]
     pos_y = player_pos[1] + direction[1]
-    if pos_y >= len(terrain) or pos_x >= len(terrain[0]) or terrain[pos_y][pos_x].obstacle != 0:
+    if terrain[pos_y][pos_x].type_terrain == TypeTerrain.GLITCH:
+        return False
+    if pos_y >= len(terrain) or pos_x >= len(terrain[0]) or terrain[pos_y][pos_x].obstacle != 0 or terrain[pos_y][pos_x].type_terrain == TypeTerrain.BLACK:
         return True
     return False
 
