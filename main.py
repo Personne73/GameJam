@@ -41,14 +41,14 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     game_over = True
                 elif event.key == pg.K_z:
-                    player.move((0, 1))
+                    player.move(0, 1)
                     terrain.shift_terrain(screen)
                 elif event.key == pg.K_s:
-                    player.move((0, 1))
+                    player.move(0, -1)
                 elif event.key == pg.K_d:
-                    player.move((1, 0))
+                    player.move(1, 0)
                 elif event.key == pg.K_q:
-                    player.move((-1, 0))
+                    player.move(-1, 0)
         
         screen.fill("#b1d670")
         player_group.draw(screen)
