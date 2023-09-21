@@ -18,12 +18,12 @@ def main():
     screen = pg.display.set_mode(window_size)
     game_over = False
 
-    tree = Tree(0, 0)
-    bush = Bush(window_size[0] / 2, window_size[1] / 2)
-    rock = Rock(100, 100)
-    trunk = TreeTrunk(200, 200)
-    void = Void(window_size[0] / 2, window_size[1] / 2)
-    grass = Row("grass")
+    #tree = Tree(0, 0)
+    #bush = Bush(window_size[0] / 2, window_size[1] / 2)
+    #rock = Rock(100, 100)
+    #trunk = TreeTrunk(200, 200)
+    #void = Void(window_size[0] / 2, window_size[1] / 2)
+    #grass = Row("grass")
     terrain = Terrain()
 
     clock_framerate = pg.time.Clock()
