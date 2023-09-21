@@ -57,7 +57,11 @@ class Menu:
         rect.center = (x, y)
         self.screen.blit(image, rect)
 
-    def draw(self, high_score):
+    def play_music(self, music_path):
+        pg.mixer.music.load(music_path)
+        pg.mixer.music.play(-1)  # -1 means that the music will be played in loop
+
+    def draw(self):
         # Draw the background
         # self.screen.fill((0, 0, 0))  # Background color (black)
         background_image_path = os.path.join("images", "menu_background.png")
@@ -90,6 +94,7 @@ class Menu:
 
     def handle_events(self):
         if self.icon_play_button.is_clicked():
+            pg.mixer.music.stop()
             print("Start button clicked")
         if self.icon_play_button.is_hovered():
             self.icon_play_button.switch_icon()
@@ -113,13 +118,15 @@ def main():
 
     # Create the menu
     menu = Menu(screen)
-    menu.draw(high_score)
+    menu.draw()
+    menu.play_music(os.path.join("sounds", "menu_music.mp3"))
 
     while not game_over:
         for event in pg.event.get():
             menu.handle_events()
             if event.type == pg.QUIT:
                 game_over = True
+                pg.mixer.music.stop()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     game_over = True
