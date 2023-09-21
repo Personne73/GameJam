@@ -33,6 +33,7 @@ def main():
     road3.move(CASE_SIZE * 3)
 
     while not game_over and player.is_alive:
+        terrain.update(screen)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
@@ -50,7 +51,6 @@ def main():
                 elif event.key == pg.K_q:
                     player.move(-1, 0)
         
-        screen.fill("#b1d670")
         player_group.draw(screen)
         player_group.update(car_group)
         car_group.draw(screen)

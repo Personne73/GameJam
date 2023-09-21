@@ -70,7 +70,7 @@ class Terrain(object):
                 self.tableau[19 - i][x] = Cell(TypeTerrain.GRASS, 0)
     
 
-    def shift_terrain(self,screen):
+    def shift_terrain(self, screen):
         for y in range(18, -1, -1):
             for x in range(1, 13):
                 self.tableau[y + 1][x] = self.tableau[y][x]
