@@ -26,7 +26,7 @@ def main():
     player_group.add(player)
 
     car_group = pg.sprite.Group()
-    car_group.add(Car(str(Path.cwd()) + "/Sprites/", True))
+    car_group.add(Car(str(Path.cwd()) + "/Sprites/", False))
     # car_group.add(Car(str(Path.cwd()) + "/Sprites/", False))
 
 
@@ -50,7 +50,6 @@ def main():
                     player.move((-1, 0))
         
         screen.fill("#b1d670")
-        # print(pg.sprite.spritecollideany(player, car_group))
         player_group.draw(screen)
         player_group.update(car_group)
         car_group.draw(screen)

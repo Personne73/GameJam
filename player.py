@@ -21,10 +21,9 @@ class Player(pg.sprite.Sprite):
         self.mask = pg.mask.from_surface(self.image)
 
 
-        self.position = [7, 15]
         self.rect = self.image.get_rect()
-        self.x = self.position[0] * main.CASE_SIZE  # Position initiale en pixels (6ème colonne)
-        self.y = self.position[1] * main.CASE_SIZE  # Position initiale en pixels (dernière ligne)
+        self.x = 7 * main.CASE_SIZE  # Position initiale en pixels (6ème colonne)
+        self.y = 15 * main.CASE_SIZE  # Position initiale en pixels (dernière ligne)
 
 
     def update(self, car_group):
@@ -41,7 +40,8 @@ class Player(pg.sprite.Sprite):
         self.image = self.images.get(direction, self.image)
 
     def check_collision(self, car_group):
-        if pg.sprite.spritecollide(self, car_group, False, pg.sprite.collide_mask):
+        case_x = self.x / main.CASE_SIZE
+        if 0 < case_x < main.WIDTH - 1 and pg.sprite.spritecollide(self, car_group, False, pg.sprite.collide_mask):
             self.is_alive = False
         
     # def isBlocked(self, terrain):
