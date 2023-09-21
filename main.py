@@ -1,13 +1,7 @@
 import pygame as pg
 import sys
 
-from land.row import Row
 from land.terrain import Terrain
-from obstacle.bush import Bush
-from obstacle.rock import Rock
-from obstacle.tree import Tree
-from obstacle.tree_trunk import TreeTrunk
-from obstacle.void import Void
 
 FRAMERATE = 60 # Set fps
 
