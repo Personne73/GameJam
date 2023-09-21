@@ -1,5 +1,5 @@
 import pygame as pg
-import main
+import constants
 
 class Buffer(object):
     def __init__(self, unit):
@@ -21,8 +21,8 @@ class Buffer(object):
 
 class Player(pg.sprite.Sprite):
     MOVE_STEPS = 8
-    buffer_y = Buffer(main.CASE_SIZE / MOVE_STEPS)
-    buffer_x = Buffer(main.CASE_SIZE / MOVE_STEPS)
+    buffer_y = Buffer(constants.CASE_SIZE / MOVE_STEPS)
+    buffer_x = Buffer(constants.CASE_SIZE / MOVE_STEPS)
     jmp = 0
     angle = 0
 
@@ -35,8 +35,8 @@ class Player(pg.sprite.Sprite):
 
         self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.x = 240
-        self.y = 520
+        self.x = constants.CASE_SIZE * 6
+        self.y = constants.CASE_SIZE * (constants.HEIGHT - 3)
         self.rect.topleft = (self.x, self.y)
 
     def update(self, car_group):
@@ -62,7 +62,7 @@ class Player(pg.sprite.Sprite):
         dy : Nombre de cases sur l'axe y [-1, 1]
         blocked : Si True, le joueur ne sera pas déplacé
         '''
-        if (not blocked and (0 <= self.x/main.CASE_SIZE + dx < main.WIDTH) and (4 <= self.y/main.CASE_SIZE - dy < main.HEIGHT)):
+        if (not blocked and (0 <= self.x/constants.CASE_SIZE + dx < constants.WIDTH) and (4 <= self.y/constants.CASE_SIZE - dy < constants.HEIGHT)):
             self.buffer_x.add(dx * self.MOVE_STEPS)
             self.buffer_y.add(- dy * self.MOVE_STEPS)
         new_angle = self.pos_to_angle(dx, dy)
@@ -79,8 +79,8 @@ class Player(pg.sprite.Sprite):
             return 0 if dy > 0 else 180
         
     def check_collision(self, car_group):
-        case_x = self.x / main.CASE_SIZE
-        if 0 < case_x < main.WIDTH - 1 and pg.sprite.spritecollide(self, car_group, False, pg.sprite.collide_mask):
+        case_x = self.x / constants.CASE_SIZE
+        if 0 < case_x < constants.WIDTH - 1 and pg.sprite.spritecollide(self, car_group, False, pg.sprite.collide_mask):
             self.is_alive = False
     
     # def isBlocked(self, terrain):

@@ -1,6 +1,6 @@
 import pygame as pg
 import random
-import main
+import constants
 
 class Car(pg.sprite.Sprite):
     SKINS = []
@@ -28,14 +28,14 @@ class Car(pg.sprite.Sprite):
         self.rect.top = y
         if self.direction:
             self.image = pg.transform.flip(self.image, True, False)
-            self.x = main.WINDOW_SIZE[0]
+            self.x = constants.WINDOW_SIZE[0]
         else:
             self.x = - self.rect.w
         self.rect.left = self.x
 
     def update(self, speed):
         speed *= self.speed_factor
-        self.x -= main.CASE_SIZE * speed if self.direction else - main.CASE_SIZE * speed
+        self.x -= constants.CASE_SIZE * speed if self.direction else - constants.CASE_SIZE * speed
         self.rect.left = self.x
-        if self.x > main.WINDOW_SIZE[0]:
+        if self.x > constants.WINDOW_SIZE[0] or self.x < - self.rect.w:
             self.kill()

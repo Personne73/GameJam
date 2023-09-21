@@ -3,14 +3,7 @@ import sys
 
 from land.terrain import Terrain
 import player as pl
-from land.road import Road
-from pathlib import Path
-
-FRAMERATE = 60 # Set fps
-CASE_SIZE = 40 #pixels
-WIDTH = 14
-HEIGHT = 20
-WINDOW_SIZE = (CASE_SIZE * WIDTH, CASE_SIZE * HEIGHT)
+import constants
 
 def draw_score(score, best_score, screen):
     if score >= best_score:
@@ -38,7 +31,7 @@ def draw_score(score, best_score, screen):
 
 def main():
     pg.init()
-    screen = pg.display.set_mode(WINDOW_SIZE)
+    screen = pg.display.set_mode(constants.WINDOW_SIZE)
     
     game_over = False
     clock_framerate = pg.time.Clock()
@@ -47,19 +40,14 @@ def main():
     score = 0
     best_score = 0
 
-    player = pl.Player(str(Path.cwd()) + "/Sprites/")
+    player = pl.Player(constants.IMG_PATH)
     player_group = pg.sprite.Group()
     player_group.add(player)
 
     car_group = pg.sprite.Group()
-    road1 = Road(str(Path.cwd()) + "/Sprites/")
-    road2 = Road(str(Path.cwd()) + "/Sprites/")
-    road3 = Road(str(Path.cwd()) + "/Sprites/")
-    road2.move(CASE_SIZE)
-    road3.move(CASE_SIZE * 3)
 
     while not game_over and player.is_alive:
-        terrain.update(screen)
+        terrain.update(screen, car_group)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
@@ -70,7 +58,7 @@ def main():
                 elif event.key == pg.K_z:
                     player.move(0, 1)
                     score += 1
-                    terrain.shift_terrain(screen)
+                    terrain.shift_terrain()
                 elif event.key == pg.K_s:
                     player.move(0, -1)
                 elif event.key == pg.K_d:
@@ -82,13 +70,9 @@ def main():
         player_group.update(car_group)
         car_group.draw(screen)
         car_group.update(0.05)
-        road1.update(car_group)
-        road2.update(car_group)
-        road3.update(car_group)
         draw_score(score, best_score, screen)
         pg.display.update()
-        clock_framerate.tick(FRAMERATE)
-
+        clock_framerate.tick(constants.FRAMERATE)
     pg.quit()
 
 
