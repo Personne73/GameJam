@@ -1,122 +1,143 @@
+import os
 import pygame as pg
 
 
-class Menu:
-    BLACK = (0, 0, 0)
-    GREEN = (0, 255, 0)
-    BRIGHT_GREEN = (0, 200, 0)
+class IconButton:
+    def __init__(self, icon_path, hovered_icon_path, x, y, screen):
+        self.icon = pg.image.load(icon_path)
+        self.hovered_icon = pg.image.load(hovered_icon_path)
+        self.rect = self.icon.get_rect()
+        self.rect.center = (x, y)
+        self.screen = screen
 
+    def draw_icon(self):
+        self.screen.blit(self.icon, self.rect)
+
+    def draw_hovered(self):
+        self.screen.blit(self.hovered_icon, self.rect)
+
+    def is_clicked(self):
+        # Recover the mouse position
+        mouse_pos = pg.mouse.get_pos()
+        # Check if the mouse is over the button and if the left button is pressed
+        if self.rect.collidepoint(mouse_pos) and pg.mouse.get_pressed()[0]:
+            return True
+
+        return False
+
+    def is_hovered(self):
+        mouse_pos = pg.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            return True
+        
+        return False
+    
+    def switch_icon(self):
+        if self.is_hovered():
+            self.draw_hovered()
+        elif not self.is_hovered():
+            self.draw_icon()
+
+
+class Menu:
     def __init__(self, screen):
         self.screen = screen
         self.width, self.height = screen.get_size()
-        self.font = pg.font.Font(None, 36)
-        self.start_button = Button(self.width // 4, self.height // 2 - 50, self.width // 2, 50, "Start", Menu.GREEN, self.screen)
-        # self.high_score_button = pg.Rect(self.width // 4, self.height // 2 + 50, self.width // 2, 50)
+        # Create the play button
+        icon_play_button_path = os.path.join("images", "menu_play_button.png")
+        icon_play_button_hovered_path = os.path.join("images", "menu_play_button_hover.png")
+        self.icon_play_button = IconButton(icon_play_button_path, icon_play_button_hovered_path, self.width // 2, 3 * self.height // 4, self.screen)
 
-    def draw(self):
-        # Dessiner le fond du menu
-        self.screen.fill((0, 0, 0))  # Couleur de fond (noir)
+        # Create the sound button
+        icon_sound_button_path = os.path.join("images", "music_icon.png")
+        icon_sound_button_hovered_path = os.path.join("images", "music_icon_disabled.png")
+        self.icon_sound_button = IconButton(icon_sound_button_path, icon_sound_button_hovered_path, 80, 40, self.screen)
+        self.pause = False
 
-        # Dessiner le bouton "Start"
-        self.start_button.draw(self.screen)
+    def load_image(self, image_path, x, y):
+        image = pg.image.load(image_path)
+        rect = image.get_rect()
+        rect.center = (x, y)
+        self.screen.blit(image, rect)
 
-    def handle_events(self):
-        for event in pg.event.get():
-            self.start_button.is_hovered()
-            if event.type == pg.MOUSEBUTTONDOWN:
-                self.start_button.is_clicked()
-                
+    def play_music(self, music_path):
+        pg.mixer.music.load(music_path)
+        pg.mixer.music.play(-1)  # -1 means that the music will be played in loop
 
-class Button:
-    # # Définir les couleurs
-    # BLACK = (0, 0, 0)
-    # GREEN = (0, 255, 0)
-    # BRIGHT_GREEN = (0, 200, 0)
-    
-    # # Définir les dimensions et la position du bouton
-    # button_rect = pg.Rect(300, 200, 200, 50)
-    # running = True
-    # while running:
-    #     for event in pg.event.get():
-    #         if event.type == pg.QUIT:
-    #             running = False
-    #         if event.type == pg.MOUSEBUTTONDOWN:
-    #             if event.button == 1:  # Clic gauche de la souris
-    #                 if button_rect.collidepoint(event.pos):
-    #                     print("Bouton cliqué")  # Ajoutez ici le code que vous souhaitez exécuter lorsque le bouton est cliqué
+    def draw(self, high_score):
+        # Draw the background
+        background_image_path = os.path.join("images", "menu_background.png")
+        self.load_image(background_image_path, self.width // 2, self.height // 2)
 
-    # # Vérifier si la souris survole le bouton
-    # if button_rect.collidepoint(pg.mouse.get_pos()):
-    #     hovered = True
-    # else:
-    #     hovered = False
+        # Draw the logo
+        logo_image_path = os.path.join("images", "menu_logo.png")
+        self.load_image(logo_image_path, self.width // 2, self.height // 2)
 
-    # # Effacer l'écran
-    # screen.fill(BLACK)
+        # Draw the play button
+        self.icon_play_button.draw_icon()
 
-    # # Dessiner le bouton avec une couleur différente s'il est survolé
-    # if hovered:
-    #     pg.draw.rect(screen, BRIGHT_GREEN, button_rect)
-    # else:
-    #     pg.draw.rect(screen, GREEN, button_rect)
+        # Draw the sound button
+        self.icon_sound_button.draw_icon()
 
-    # # Mettre à jourr l'affichage
-    # pg.display.flip()
+        # Draw the high score
+        self.draw_high_score(high_score)
 
-    def __init__(self, x, y, width, height, text, color, screen):
-        self.rect = pg.Rect(x, y, width, height)
-        self.text = text
-        self.screen = screen
-        self.color = color
-
-    def draw(self, screen):
-        pg.draw.rect(self.screen, self.color, self.rect)
-        font = pg.font.Font(None, 36)
-        text = font.render(self.text, True, (0, 0, 0))
-        text_rect = text.get_rect(center=self.rect.center)
+    def draw_high_score(self, high_score):
+        font_path = 'fonts/8-BIT WONDER.TTF'  # Chemin complet du fichier de police
+        font = pg.font.Font(font_path, 16)  # Utilisez le chemin complet du fichier de police
+        text = font.render(f"High Score " +  str(high_score), True, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = (self.width // 2, 40)
         self.screen.blit(text, text_rect)
 
-    def is_hovered(self):
-        if self.rect.collidepoint(pg.mouse.get_pos()):
-            hovered = True
-            print("is hovered")
-        else:
-            hovered = False
-        # mouse_pos = pg.mouse.get_pos()
-        # return self.rect.collidepoint(mouse_pos)
+    def handle_events(self):
+        if self.icon_play_button.is_clicked():
+            pg.mixer.music.stop()
+        if self.icon_sound_button.is_clicked():
+            if self.pause:
+                pg.mixer.music.unpause()
+                self.icon_sound_button.draw_icon()
+                self.pause = False
+            else:
+                pg.mixer.music.pause()
+                self.icon_sound_button.draw_hovered()
+                self.pause = True
+        if self.icon_play_button.is_hovered() or not self.icon_play_button.is_hovered():
+            self.icon_play_button.switch_icon()
 
-    def is_clicked(self):     
-        if self.collidepoint(pg.mouse.get_pos()):
-            print("Start button clicked")  # Vous pouvez ajouter le code de démarrage du jeu ici
-                   
 
 def main():
     pg.init()
     window_size = (560, 800)
     screen = pg.display.set_mode(window_size)
     game_over = False
-    
+
     clock_framerate = pg.time.Clock()
+
+    high_score = 1000
+
+    # Create the menu
     menu = Menu(screen)
+    menu.draw(high_score)
+    menu.play_music(os.path.join("sounds", "menu_music.mp3"))
 
     while not game_over:
         for event in pg.event.get():
+            menu.handle_events()
             if event.type == pg.QUIT:
                 game_over = True
+                pg.mixer.music.stop()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     game_over = True
-        
-        menu.handle_events()
-        menu.draw()
 
-        FRAMERATE =  60
+        FRAMERATE = 60
 
         pg.display.flip()
         clock_framerate.tick(FRAMERATE)
 
     pg.quit()
-    
+
 
 if __name__ == "__main__":
     main()
