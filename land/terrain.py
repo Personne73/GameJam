@@ -86,7 +86,7 @@ class Terrain(object):
             if self.tableau[y][1].type_terrain is TypeTerrain.ROAD:
                 self.tableau[y][1].move(y * const.CASE_SIZE)
 
-        for i in range(3):
+        for i in range(const.HEIGHT - const.SCROLL_STOP):
             for x in range(1, 13):
                 self.tableau[20 - i][x] = Cell(TypeTerrain.GRASS, 0)
     

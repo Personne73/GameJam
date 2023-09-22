@@ -27,7 +27,6 @@ class Player(pg.sprite.Sprite):
     buffer_x = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
     jmp = 0
     angle = 0
-    SCROLL_STOP = const.HEIGHT - 5
 
     def __init__(self, image_path: str):
         super().__init__()
@@ -38,7 +37,7 @@ class Player(pg.sprite.Sprite):
 
         self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.x = const.CASE_SIZE * 7 + 2
+        self.x = const.CASE_SIZE * 6 + 2
         self.y = const.CASE_SIZE * 17 + 2
         self.rect.topleft = (self.x, self.y)
 
@@ -65,7 +64,7 @@ class Player(pg.sprite.Sprite):
         dy : Nombre de cases sur l'axe y [-1, 1]
         blocked : Si True, le joueur ne sera pas déplacé
         '''
-        if (not blocked and (0 <= self.x/const.CASE_SIZE + dx < const.WIDTH) and (self.SCROLL_STOP <= self.y/const.CASE_SIZE - dy < const.HEIGHT)):
+        if (not blocked and (0 <= self.x/const.CASE_SIZE + dx < const.WIDTH) and (const.SCROLL_STOP <= self.y/const.CASE_SIZE - dy < const.HEIGHT)):
             self.buffer_x.add(dx * const.MOVE_STEPS)
             self.buffer_y.add(- dy * const.MOVE_STEPS)
         new_angle = self.pos_to_angle(dx, dy)
