@@ -95,6 +95,8 @@ class Menu:
         # Draw the high score
         self.draw_high_score(high_score)
 
+        self.draw_commands()
+
     def draw_high_score(self, high_score):
         SMALL_FONT = 15
         MEDIUM_FONT = 15
@@ -111,6 +113,14 @@ class Menu:
 
         # Draw the sound button
         self.icon_sound_button.draw_icon()
+
+    def draw_commands(self):
+        font_path = 'fonts/8-BIT WONDER.TTF'  # Chemin complet du fichier de police
+        font = pg.font.Font(font_path, 16)  # Utilisez le chemin complet du fichier de police
+        text = font.render(f"Commands Z Q S D", True, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = (self.width // 2, 700)
+        self.screen.blit(text, text_rect)
 
     def handle_events(self):
         if self.icon_play_button.is_clicked():
