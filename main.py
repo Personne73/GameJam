@@ -84,7 +84,7 @@ def main():
                     player.move(-1, 0, encounter_obstacle(player.get_position(), terrain.tableau, (-1, 0)))
     
         player_group.update(car_group)
-        car_group.update(0.05 + 0.0002 * score)
+        car_group.update(0.05 + 0.0003 * score)
         car_group.draw(screen)
         draw_mask(screen)
         player_group.draw(screen)
