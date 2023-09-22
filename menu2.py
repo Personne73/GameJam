@@ -95,7 +95,7 @@ class Menu:
         # Draw the high score
         self.draw_high_score(high_score)
 
-        self.draw_commands()
+        #self.draw_commands()
 
     def draw_high_score(self, high_score):
         SMALL_FONT = 15

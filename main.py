@@ -91,17 +91,17 @@ def main():
                     if event.type == pg.KEYDOWN:
                         if event.key == pg.K_ESCAPE:
                             game_over = True
-                        elif event.key == pg.K_z:
+                        elif event.key == pg.K_z or event.key == pg.K_UP:
                             obstacle = encounter_obstacle(player.get_position(), terrain.tableau, (0, -1))
                             if not obstacle and player.get_position()[1] <= constants.SCROLL_STOP:
                                 score += 1
                                 terrain.shift_terrain()
                             player.move(0, 1, obstacle)
-                        elif event.key == pg.K_s:
+                        elif event.key == pg.K_s or event.key == pg.K_DOWN:
                             player.move(0, -1, encounter_obstacle(player.get_position(), terrain.tableau, (0, 1)))
-                        elif event.key == pg.K_d:
+                        elif event.key == pg.K_d or event.key == pg.K_RIGHT:
                             player.move(1, 0, encounter_obstacle(player.get_position(), terrain.tableau, (1, 0)))
-                        elif event.key == pg.K_q:
+                        elif event.key == pg.K_q or event.key == pg.K_LEFT:
                             player.move(-1, 0, encounter_obstacle(player.get_position(), terrain.tableau, (-1, 0)))
 
                 player_group.update(car_group)
