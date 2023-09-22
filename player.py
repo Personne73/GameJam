@@ -39,8 +39,8 @@ class Player(pg.sprite.Sprite):
 
         self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.x = constants.CASE_SIZE * 6 + 2
-        self.y = self.SCROLL_STOP * constants.CASE_SIZE + 2
+        self.x = constants.CASE_SIZE * 7 + 2
+        self.y = constants.CASE_SIZE * 17 + 2
         self.rect.topleft = (self.x, self.y)
 
     def update(self, car_group):
