@@ -82,12 +82,22 @@ class Menu:
         # Draw the high score
         self.draw_high_score(high_score)
 
+        self.draw_commands()
+
     def draw_high_score(self, high_score):
         font_path = 'fonts/8-BIT WONDER.TTF'  # Chemin complet du fichier de police
         font = pg.font.Font(font_path, 16)  # Utilisez le chemin complet du fichier de police
         text = font.render(f"High Score " +  str(high_score), True, (255, 255, 255))
         text_rect = text.get_rect()
         text_rect.center = (self.width // 2, 40)
+        self.screen.blit(text, text_rect)
+
+    def draw_commands(self):
+        font_path = 'fonts/8-BIT WONDER.TTF'  # Chemin complet du fichier de police
+        font = pg.font.Font(font_path, 16)  # Utilisez le chemin complet du fichier de police
+        text = font.render(f"Commands Z Q S D", True, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = (self.width // 2, 700)
         self.screen.blit(text, text_rect)
 
     def handle_events(self):
