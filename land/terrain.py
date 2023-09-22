@@ -2,8 +2,9 @@ import random
 import pygame as pg
 from enum import Enum
 import os
-import constants
+import constants as const
 from land.road import Road
+from player import Buffer
 
 class TypeTerrain(Enum):
     GRASS = 1
@@ -18,9 +19,10 @@ class Cell():
 
 class Terrain(object):
     # 20x14 blocks, dont 2 de bordure en largeur
+    px_y = 0
 
     def __init__(self):
-        self.tableau = [[]] * 20
+        self.tableau = [[]] * (const.HEIGHT + 1)
 
         self.init_terrain()
 
@@ -37,6 +39,7 @@ class Terrain(object):
         }
 
         self.count_lines = 0
+        self.buffer_y = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
 
         self.bloc_glitch = [[Cell(TypeTerrain.BLACK), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.BLACK)],
                             [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GLITCH)],
@@ -59,7 +62,7 @@ class Terrain(object):
                     self.tableau[line][x].obstacle = random.randint(1, 4)
                     count += 1
             
-            if(line == 19):
+            if(line == 20):
                 return
 
             # check if first grass line
@@ -69,7 +72,6 @@ class Terrain(object):
                         self.tableau[line][x].obstacle = 0
 
 
-        
     def create_random_line(self):
         terrain_aleatoire = random.choice([TypeTerrain.GRASS, TypeTerrain.GRASS, TypeTerrain.GRASS, TypeTerrain.ROAD, TypeTerrain.ROAD])
         new_line = [Cell(TypeTerrain.BLACK) if i in [0, 13] else Cell(terrain_aleatoire) for i in range(14)]
@@ -78,22 +80,24 @@ class Terrain(object):
         return new_line
     
     def init_terrain(self):
-        for y in range(19, -1, -1):
+        for y in range(20, -1, -1):
             self.tableau[y] = self.create_random_line()
             self.add_random_obstacles(y)
             if self.tableau[y][1].type_terrain is TypeTerrain.ROAD:
-                self.tableau[y][1].move(y * constants.CASE_SIZE)
+                self.tableau[y][1].move(y * const.CASE_SIZE)
 
-        for i in range(3):
+        for i in range(const.HEIGHT - const.SCROLL_STOP):
             for x in range(1, 13):
-                self.tableau[19 - i][x] = Cell(TypeTerrain.GRASS, 0)
+                self.tableau[20 - i][x] = Cell(TypeTerrain.GRASS, 0)
     
 
     def shift_terrain(self):
+        self.buffer_y.add(const.MOVE_STEPS)
+        self.px_y += - const.CASE_SIZE
         to_delete_line = self.tableau[len(self.tableau) - 1]
         if to_delete_line[1].type_terrain is TypeTerrain.ROAD:
             to_delete_line[1].kill()
-        for y in range(18, -1, -1):
+        for y in range(19, -1, -1):
             for x in range(14):
                 self.tableau[y + 1][x] = self.tableau[y][x]
         
@@ -106,8 +110,8 @@ class Terrain(object):
             self.add_random_obstacles(0)
         self.count_lines += 1
     
-    def draw_grass(self, screen, y):
-        pg.draw.rect(screen, (117, 214, 112), (40, y * 40, 12 * 40, 40))
+    def draw_grass(self, screen, y, px):
+        pg.draw.rect(screen, (117, 214, 112), (40, px, 12 * 40, 40))
 
         for x in range(1, 13):
             if self.tableau[y][x].obstacle:
@@ -116,31 +120,30 @@ class Terrain(object):
                 
                 if obstacle_image:
                     # Dessinez l'image d'obstacle sur l'écran
-                    screen.blit(obstacle_image, (x * 40, y * 40))
+                    screen.blit(obstacle_image, (x * 40, px))
 
-    def draw_road(self, screen, y):
-        pg.draw.rect(screen, (100, 100, 100), (40, y * 40, 12 * 40, 40))
+    def draw_road(self, screen, px):
+        pg.draw.rect(screen, (100, 100, 100), (40, px, 12 * 40, 40))
     
-    def draw_road_marks(self, screen, y):
+    def draw_road_marks(self, screen, px):
         road_marks = pg.image.load(os.path.abspath("./images/road_marks.png")).convert_alpha()
-        screen.blit(road_marks, (40, y * 40))
+        screen.blit(road_marks, (40, px))
 
     def update(self, screen, car_group):
+        self.px_y += self.buffer_y.consume()
         # draw the obstacles
-        for y in range(20):
+        for y in range(len(self.tableau)):
+            px = y * const.CASE_SIZE + self.px_y
             if self.tableau[y][1].type_terrain == TypeTerrain.GRASS:
-                self.draw_grass(screen, y)    
+                self.draw_grass(screen, y, px)    
             elif self.tableau[y][1].type_terrain == TypeTerrain.ROAD:
-                self.draw_road(screen, y)
+                self.draw_road(screen, px)
 
                 #check if lane road lane is size >= 2 to draw road marks:
                 if y > 0 and self.tableau[y-1][1].type_terrain == TypeTerrain.ROAD:
-                    self.draw_road_marks(screen, y)
+                    self.draw_road_marks(screen, px)
 
                 road = self.tableau[y][1]
                 road.update(car_group)
-                if (road.y != y * constants.CASE_SIZE):
-                    road.move(y * constants.CASE_SIZE)
-        
-
-            
+                if (road.y != px):
+                    road.move(px)

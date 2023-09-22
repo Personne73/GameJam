@@ -12,14 +12,17 @@ class Car(pg.sprite.Sprite):
         # Load the images only once
         if Car.SKINS == []:
             Car.SKINS = [
-                pg.image.load(image_path + "blue_car.png").convert_alpha(),
-                pg.image.load(image_path + "green_car.png").convert_alpha(),
-                pg.image.load(image_path + "orange_car.png").convert_alpha(),
-                pg.image.load(image_path + "pink_car.png").convert_alpha(),
-                pg.image.load(image_path + "red_car.png").convert_alpha(),
-                pg.image.load(image_path + "violet_car.png").convert_alpha(),
-                pg.image.load(image_path + "yellow_car.png").convert_alpha(),
-                pg.image.load(image_path + "red_truck.png").convert_alpha()
+                pg.image.load(image_path + "blue_car.png"),
+                pg.image.load(image_path + "green_car.png"),
+                pg.image.load(image_path + "orange_car.png"),
+                pg.image.load(image_path + "pink_car.png"),
+                pg.image.load(image_path + "red_car.png"),
+                pg.image.load(image_path + "violet_car.png"),
+                pg.image.load(image_path + "yellow_car.png"),
+                pg.image.load(image_path + "blue_truck.png"),
+                pg.image.load(image_path + "green_truck.png"),
+                pg.image.load(image_path + "orange_truck.png"),
+                pg.image.load(image_path + "red_truck.png")
             ]
 
         self.image = Car.SKINS[random.randint(0, len(Car.SKINS) - 1)]
@@ -27,7 +30,7 @@ class Car(pg.sprite.Sprite):
         self.mask = pg.mask.from_surface(self.image)
         self.rect.top = y
         if self.direction:
-            self.image = pg.transform.flip(self.image, True, False)
+            self.image = pg.transform.rotate(self.image, 180)
             self.x = constants.WINDOW_SIZE[0]
         else:
             self.x = - self.rect.w
