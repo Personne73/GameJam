@@ -105,9 +105,6 @@ class Terrain(object):
             self.tableau[0] = self.create_random_line()
             self.add_random_obstacles(0)
         self.count_lines += 1
-        print("__________________________________________")
-        for y in range(20):
-            print("ligne:", y, " => gauche :", self.tableau[y][0].type_terrain, "droite:",self.tableau[y][13].type_terrain)
     
     def draw_grass(self, screen, y):
         pg.draw.rect(screen, (117, 214, 112), (40, y * 40, 12 * 40, 40))

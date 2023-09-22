@@ -35,9 +35,10 @@ def draw_score(score, best_score, screen):
 def encounter_obstacle(player_pos, terrain, direction):
     pos_x = player_pos[0] + direction[0]
     pos_y = player_pos[1] + direction[1]
-    if terrain[pos_y][pos_x].type_terrain == TypeTerrain.GLITCH:
+    out_of_bounds = pos_y >= len(terrain) or pos_x >= len(terrain[0])
+    if not out_of_bounds and terrain[pos_y][pos_x].type_terrain == TypeTerrain.GLITCH:
         return False
-    if pos_y >= len(terrain) or pos_x >= len(terrain[0]) or terrain[pos_y][pos_x].obstacle != 0 or terrain[pos_y][pos_x].type_terrain == TypeTerrain.BLACK:
+    if out_of_bounds or terrain[pos_y][pos_x].obstacle != 0 or terrain[pos_y][pos_x].type_terrain == TypeTerrain.BLACK:
         return True
     return False
 
