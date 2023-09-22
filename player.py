@@ -23,10 +23,6 @@ class Buffer(object):
         return self.val * self.unit
 
 class Player(pg.sprite.Sprite):
-    buffer_y = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
-    buffer_x = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
-    jmp = 0
-    angle = 0
 
     def __init__(self, image_path: str):
         super().__init__()
@@ -40,6 +36,11 @@ class Player(pg.sprite.Sprite):
         self.x = const.CASE_SIZE * 6 + 2
         self.y = const.CASE_SIZE * 17 + 2
         self.rect.topleft = (self.x, self.y)
+
+        self.buffer_y = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
+        self.buffer_x = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
+        self.jmp = 0
+        self.angle = 0
 
     def update(self, car_group):
         self.check_collision(car_group)

@@ -19,7 +19,6 @@ class Cell():
 
 class Terrain(object):
     # 20x14 blocks, dont 2 de bordure en largeur
-    buffer_y = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
     px_y = 0
 
     def __init__(self):
@@ -40,6 +39,7 @@ class Terrain(object):
         }
 
         self.count_lines = 0
+        self.buffer_y = Buffer(const.CASE_SIZE / const.MOVE_STEPS)
 
         self.bloc_glitch = [[Cell(TypeTerrain.BLACK), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.GRASS), Cell(TypeTerrain.BLACK)],
                             [Cell(TypeTerrain.GLITCH), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, random.randint(1,4)), Cell(TypeTerrain.GRASS, 0), Cell(TypeTerrain.GLITCH)],
@@ -93,6 +93,7 @@ class Terrain(object):
 
     def shift_terrain(self):
         self.buffer_y.add(const.MOVE_STEPS)
+        self.px_y += - const.CASE_SIZE
         to_delete_line = self.tableau[len(self.tableau) - 1]
         if to_delete_line[1].type_terrain is TypeTerrain.ROAD:
             to_delete_line[1].kill()
@@ -108,7 +109,6 @@ class Terrain(object):
             self.tableau[0] = self.create_random_line()
             self.add_random_obstacles(0)
         self.count_lines += 1
-        self.px_y += - const.CASE_SIZE
     
     def draw_grass(self, screen, y, px):
         pg.draw.rect(screen, (117, 214, 112), (40, px, 12 * 40, 40))
@@ -147,5 +147,3 @@ class Terrain(object):
                 road.update(car_group)
                 if (road.y != px):
                     road.move(px)
-
-            
