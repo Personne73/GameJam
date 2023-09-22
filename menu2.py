@@ -59,6 +59,11 @@ class Menu:
         self.icon_sound_button = IconButton(icon_sound_button_path, icon_sound_button_hovered_path, 80, 40, self.screen)
         self.pause = False
 
+        # Create the quit button 
+        icon_quit_button_path = os.path.join("images", "menu_quit_button.png")
+        icon_quit_button_hovered_path = os.path.join("images", "menu_quit_button.png")
+        self.icon_quit_buttton = IconButton(icon_quit_button_path, icon_quit_button_hovered_path, 480, 40, self.screen)
+
     def load_image(self, image_path, x, y):
         image = pg.image.load(image_path)
         rect = image.get_rect()
@@ -81,6 +86,11 @@ class Menu:
 
         # Draw the play button
         self.icon_play_button.draw_icon()
+
+        # Draw the sound button
+        self.icon_sound_button.draw_icon()
+
+        self.icon_quit_buttton.draw_icon()
 
         # Draw the high score
         self.draw_high_score(high_score)
@@ -114,6 +124,8 @@ class Menu:
                 pg.mixer.music.pause()
                 self.icon_sound_button.draw_hovered()
                 self.pause = True
+        if self.icon_quit_buttton.is_clicked():
+            pg.quit()
         if self.icon_play_button.is_hovered() or not self.icon_play_button.is_hovered():
             self.icon_play_button.switch_icon()
 
