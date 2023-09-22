@@ -115,6 +115,8 @@ class Menu:
     def handle_events(self):
         if self.icon_play_button.is_clicked():
             pg.mixer.music.stop()
+            begin_sound = pg.mixer.Sound(os.path.abspath('sfx/being.wav'))
+            pg.mixer.Sound.play(begin_sound)
             return False
         if self.icon_sound_button.is_clicked():
             if self.pause:

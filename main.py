@@ -59,7 +59,7 @@ def main():
     while running:
         # Create the menu
         menu = Menu(screen)
-        menu.play_music(os.path.join("sounds", "menu_music.mp3"))
+        menu.play_music(os.path.abspath('sfx/music_8bit.wav'))
 
         in_menu = True  # Flag to track if we're in the menu
         game_over = False

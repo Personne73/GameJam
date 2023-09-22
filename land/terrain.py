@@ -77,6 +77,15 @@ class Terrain(object):
         new_line = [Cell(TypeTerrain.BLACK) if i in [0, 13] else Cell(terrain_aleatoire) for i in range(14)]
         if terrain_aleatoire is TypeTerrain.ROAD:
             new_line[1] = Road(TypeTerrain.ROAD)
+
+            #road sound
+            if random.randint(1,5) == 1:
+                road_sound_01 = pg.mixer.Sound(os.path.abspath('sfx/driveby_01.wav'))
+                road_sound_02 = pg.mixer.Sound(os.path.abspath('sfx/driveby_02.wav'))
+                road_sound_03 = pg.mixer.Sound(os.path.abspath('sfx/driveby_03.wav'))
+                road_sounds = [road_sound_01, road_sound_02, road_sound_03]
+                pg.mixer.Sound.play(random.choice(road_sounds))
+
         return new_line
     
     def init_terrain(self):
@@ -101,7 +110,7 @@ class Terrain(object):
             for x in range(14):
                 self.tableau[y + 1][x] = self.tableau[y][x]
         
-        if (self.count_bloc_glitch != 6 or self.count_lines % 70 == 0) and self.count_lines != 0:
+        if (self.count_bloc_glitch != 6 or self.count_lines % 30 == 0) and self.count_lines != 0:
             self.tableau[0] = self.bloc_glitch[self.count_bloc_glitch]
             self.count_bloc_glitch -= 1
             if self.count_bloc_glitch == -1: self.count_bloc_glitch = 6
