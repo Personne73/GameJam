@@ -93,7 +93,7 @@ def main():
                             game_over = True
                         elif event.key == pg.K_z:
                             obstacle = encounter_obstacle(player.get_position(), terrain.tableau, (0, -1))
-                            if not obstacle and player.get_position()[1] <= player.SCROLL_STOP:
+                            if not obstacle and player.get_position()[1] <= constants.SCROLL_STOP:
                                 score += 1
                                 terrain.shift_terrain()
                             player.move(0, 1, obstacle)
@@ -160,7 +160,7 @@ def main():
     #                 game_over = True
     #             elif event.key == pg.K_z:
     #                 obstacle = encounter_obstacle(player.get_position(), terrain.tableau, (0, -1))
-    #                 if not obstacle and player.get_position()[1] <= player.SCROLL_STOP:
+    #                 if not obstacle and player.get_position()[1] <= constants.SCROLL_STOP:
     #                     score += 1
     #                     terrain.shift_terrain()
     #                 player.move(0, 1, obstacle)
