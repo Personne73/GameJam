@@ -74,7 +74,7 @@ class Menu:
         pg.mixer.music.load(music_path)
         pg.mixer.music.play(-1)  # -1 means that the music will be played in loop
 
-    def draw(self):
+    def draw(self, high_score):
         # Draw the background
         # self.screen.fill((0, 0, 0))  # Background color (black)
         background_image_path = os.path.join("images", "menu_background.png")
@@ -93,18 +93,18 @@ class Menu:
         self.icon_quit_buttton.draw_icon()
 
         # Draw the high score
-        #self.draw_high_score(high_score)
+        self.draw_high_score(high_score)
 
     def draw_high_score(self, high_score):
         SMALL_FONT = 15
         MEDIUM_FONT = 15
         BIG_FONT = 25
 
-        crossy_font_big = pg.font.Font('fonts/8-BIT WONDER.TTF', BIG_FONT)
-        crossy_font_small = pg.font.Font('fonts/8-BIT WONDER.TTF', SMALL_FONT)
+        crossy_font_big = pg.font.Font('font/8-BIT WONDER.TTF', BIG_FONT)
+        crossy_font_small = pg.font.Font('font/8-BIT WONDER.TTF', SMALL_FONT)
 
-        font = pg.font.Font(crossy_font_big, 36)  # Sélectionnez la police et la taille de la police
-        text = font.render(f"High Score: {high_score}", True, (255, 255, 255))  # Créez un objet texte avec le score
+        font = pg.font.Font('font/8-BIT WONDER.TTF', 15)  # Sélectionnez la police et la taille de la police
+        text = font.render(f"High Score {high_score}", True, (255, 255, 255))  # Créez un objet texte avec le score
         text_rect = text.get_rect()
         text_rect.center = (self.width // 2, 50)  # Centrez le texte en haut de la fenêtre
         self.screen.blit(text, text_rect)  # Affichez le texte sur l'écran
@@ -115,6 +115,7 @@ class Menu:
     def handle_events(self):
         if self.icon_play_button.is_clicked():
             pg.mixer.music.stop()
+            return False
         if self.icon_sound_button.is_clicked():
             if self.pause:
                 pg.mixer.music.unpause()
@@ -128,43 +129,8 @@ class Menu:
             pg.quit()
         if self.icon_play_button.is_hovered() or not self.icon_play_button.is_hovered():
             self.icon_play_button.switch_icon()
+        return True
 
     
 
 
-def main():
-    pg.init()
-    window_size = (560, 800)
-    screen = pg.display.set_mode(window_size)
-    game_over = False
-
-    clock_framerate = pg.time.Clock()
-
-    high_score = 1000
-
-    # Create the menu
-    menu = Menu(screen)
-    menu.draw()
-    menu.play_music(os.path.join("sounds", "menu_music.mp3"))
-
-    while not game_over:
-        for event in pg.event.get():
-            menu.handle_events()
-            if event.type == pg.QUIT:
-                game_over = True
-                pg.mixer.music.stop()
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    game_over = True
-
-
-        FRAMERATE = 60
-
-        pg.display.flip()
-        clock_framerate.tick(FRAMERATE)
-
-    pg.quit()
-
-
-if __name__ == "__main__":
-    main()
