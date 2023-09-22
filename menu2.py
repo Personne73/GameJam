@@ -93,7 +93,7 @@ class Menu:
         self.icon_quit_buttton.draw_icon()
 
         # Draw the high score
-        self.draw_high_score(high_score)
+        #self.draw_high_score(high_score)
 
     def draw_high_score(self, high_score):
         SMALL_FONT = 15
